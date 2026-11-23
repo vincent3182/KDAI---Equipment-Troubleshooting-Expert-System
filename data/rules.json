@@ -1,0 +1,85 @@
+{
+  "areas": {
+    "power": "The laptop will not turn on, or will not charge",
+    "display": "Problems with the screen",
+    "network": "Problems connecting to Wi-Fi or the internet",
+    "performance": "The laptop is slow or overheating",
+    "storage": "The laptop will not start Windows/macOS, or has disk problems",
+    "audio_input": "Problems with sound, the keyboard or the touchpad"
+  },
+  "questions": {
+    "wont_turn_on": {"area": "power", "text": "Does the laptop fail to turn on when you press the power button?"},
+    "on_battery_only": {"area": "power", "text": "Are you trying to use the laptop without the charger plugged in?"},
+    "charger_plugged_in": {"area": "power", "text": "Is the charger plugged into both the laptop and the wall socket?"},
+    "charging_light_off": {"area": "power", "text": "Is the charging light (on the laptop or the charger) off?"},
+    "socket_works_for_other_devices": {"area": "power", "text": "Does another device (like a phone charger) work in the same wall socket?"},
+    "lights_or_fan_on": {"area": "power", "text": "When you press the power button, do any lights or the fan come on?"},
+    "external_monitor_shows_picture": {"area": "display", "text": "If you connect an external monitor, does a picture appear on it?"},
+    "not_charging": {"area": "power", "text": "Is the battery not charging, even though the laptop is plugged in?"},
+    "battery_drains_fast": {"area": "power", "text": "Does the battery run out much faster than it used to?"},
+    "battery_swollen": {"area": "power", "text": "Is the laptop case bulging, or is the touchpad being pushed up?"},
+    "laptop_over_3_years_old": {"area": "power", "text": "Is the laptop more than 3 years old?"},
+    "laptop_over_5_years_old": {"area": "power", "text": "Is the laptop more than 5 years old?"}
+  },
+  "rules": [
+    {"id": "P1", "if": ["wont_turn_on", "on_battery_only"], "then": "flat_battery"},
+    {"id": "P2", "if": ["wont_turn_on", "charger_plugged_in", "charging_light_off"], "then": "no_power_reaching_laptop"},
+    {"id": "P3", "if": ["no_power_reaching_laptop", "socket_works_for_other_devices"], "then": "faulty_charger"},
+    {"id": "P4", "if": ["not_charging", "charger_plugged_in", "charging_light_off", "socket_works_for_other_devices"], "then": "faulty_charger"},
+    {"id": "P5", "if": ["wont_turn_on", "charger_plugged_in", "lights_or_fan_on"], "then": "laptop_has_power"},
+    {"id": "P6", "if": ["laptop_has_power", "external_monitor_shows_picture"], "then": "faulty_screen"},
+    {"id": "P7", "if": ["battery_drains_fast", "laptop_over_3_years_old"], "then": "battery_capacity_reduced"},
+    {"id": "P8", "if": ["battery_capacity_reduced"], "then": "worn_out_battery"},
+    {"id": "P9", "if": ["battery_swollen"], "then": "swollen_battery"},
+    {"id": "R1", "if": ["flat_battery"], "then": "recommend_charge_battery"},
+    {"id": "R2", "if": ["faulty_charger"], "then": "recommend_replace_charger"},
+    {"id": "R3", "if": ["faulty_screen"], "then": "recommend_screen_repair"},
+    {"id": "R4", "if": ["faulty_screen", "laptop_over_5_years_old"], "then": "recommend_consider_new_laptop"},
+    {"id": "R5", "if": ["worn_out_battery"], "then": "recommend_replace_battery"},
+    {"id": "R6", "if": ["swollen_battery"], "then": "recommend_stop_using_immediately"}
+  ],
+  "diagnoses": {
+    "flat_battery": {
+      "areas": ["power"],
+      "cause": "The battery is completely flat.",
+      "priority": 1,
+      "conflicts_with": [
+        "laptop_has_power"
+      ]
+    },
+    "faulty_charger": {
+      "areas": ["power"],
+      "cause": "The charger is probably faulty: the wall socket works, but no power reaches the laptop.",
+      "priority": 2,
+      "conflicts_with": [
+        "laptop_has_power"
+      ]
+    },
+    "faulty_screen": {
+      "areas": ["display", "power"],
+      "cause": "The laptop has power and an external monitor works, so the laptop's own screen or its cable is probably faulty.",
+      "priority": 2,
+      "conflicts_with": []
+    },
+    "worn_out_battery": {
+      "areas": ["power"],
+      "cause": "The battery has lost capacity with age.",
+      "priority": 1,
+      "conflicts_with": []
+    },
+    "swollen_battery": {
+      "areas": ["power"],
+      "cause": "The battery appears to be swollen, which is a fire risk.",
+      "priority": 5,
+      "conflicts_with": []
+    }
+  },
+  "recommendations": {
+    "recommend_charge_battery": "Plug in the charger, wait 15 minutes, then try turning the laptop on again.",
+    "recommend_replace_charger": "Try a different compatible charger. If that works, replace the original charger.",
+    "recommend_screen_repair": "Have the screen or display cable repaired by a technician.",
+    "recommend_consider_new_laptop": "The laptop is over 5 years old, so a screen repair may cost more than the laptop is worth. Consider replacing it.",
+    "recommend_replace_battery": "Check the battery health in your system settings and replace the battery if its capacity is low.",
+    "recommend_stop_using_immediately": "Stop using and charging the laptop now, and take it to a repair shop. Do not press on or puncture the battery."
+  }
+}
