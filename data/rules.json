@@ -157,7 +157,67 @@
       "cause": "A faint image is visible with a torch, so the screen works but its backlight has failed.",
       "priority": 2,
       "conflicts_with": []
-}
+    },
+    "wifi_turned_off": {
+      "areas": ["network"],
+      "cause": "Aeroplane mode or the Wi-Fi switch is on, so the laptop is not looking for networks.",
+      "priority": 1,
+      "conflicts_with": []
+    },
+    "faulty_wifi_adapter": {
+      "areas": ["network"],
+      "cause": "Other devices see the Wi-Fi but this laptop sees no networks even after a restart, so its Wi-Fi adapter is probably faulty.",
+      "priority": 2,
+      "conflicts_with": ["wifi_turned_off"]
+    },
+    "router_or_broadband_fault": {
+      "areas": ["network"],
+      "cause": "Every device on this Wi-Fi has no internet, so the problem is the router or the broadband, not the laptop.",
+      "priority": 2,
+      "conflicts_with": []
+    },
+    "laptop_network_settings_fault": {
+      "areas": ["network"],
+      "cause": "Other devices work on the same Wi-Fi, so this laptop's network settings are probably the problem.",
+      "priority": 1,
+      "conflicts_with": ["problem_beyond_laptop"]
+    },
+    "weak_wifi_signal": {
+      "areas": ["network"],
+      "cause": "The connection drops and you are far from the router, so the signal is too weak where you are.",
+      "priority": 1,
+      "conflicts_with": []    
+    },
+    "dirty_keyboard": {
+      "areas": ["audio_input"],
+      "cause": "Crumbs or dust under the keys are stopping them from pressing properly.",
+      "priority": 1,
+      "conflicts_with": ["liquid_inside_laptop"]
+    },
+    "keyboard_ribbon_cable_fault": {
+      "areas": ["audio_input"],
+      "cause": "A USB keyboard works but the built-in one does not, so the keyboard or its ribbon cable inside the laptop is probably loose or broken.",
+      "priority": 2,
+      "conflicts_with": []
+    },
+    "touchpad_turned_off": {
+      "areas": ["audio_input"],
+      "cause": "A USB mouse works and the touchpad off light or icon is showing, so the touchpad has been switched off.",
+      "priority": 1,
+      "conflicts_with": []
+    },
+    "touchpad_hardware_fault": {
+      "areas": ["audio_input"],
+      "cause": "A USB mouse works but the touchpad stays dead after a restart, so the touchpad or its cable is probably faulty.",
+      "priority": 2,
+      "conflicts_with": ["touchpad_turned_off"]
+    },
+    "water_damage": {
+      "areas": ["audio_input", "power"],
+      "cause": "Liquid has been spilled and parts of the laptop have stopped working, so liquid has probably got inside.",
+      "priority": 4,
+      "conflicts_with": []
+    }
   },
   "recommendations": {
     "recommend_charge_battery": "Plug in the charger, wait 15 minutes, then try turning the laptop on again.",
@@ -168,6 +228,16 @@
     "recommend_stop_using_immediately": "Stop using and charging the laptop now, and take it to a repair shop. Do not press on or puncture the battery.",
     "recommend_replace_screen_panel": "Have the screen panel replaced by a technician. Avoid touching any broken glass.",
     "recommend_reseat_display_cable": "Have a technician reseat or replace the display cable inside the lid.",
-    "recommend_backlight_repair": "Have the backlight or screen panel repaired. Use an external monitor in the meantime."
+    "recommend_backlight_repair": "Have the backlight or screen panel repaired. Use an external monitor in the meantime.",
+    "recommend_turn_on_wifi": "Turn off aeroplane mode, or press the Wi-Fi key or switch, then look for networks again.",
+    "recommend_wifi_adapter_repair": "Update the Wi-Fi driver. If that does not help, use a USB Wi-Fi adapter or have the Wi-Fi card repaired.",
+    "recommend_restart_router": "Turn the router off for 30 seconds and back on. If the internet is still down, contact your broadband provider.",
+    "recommend_reset_network_settings": "Forget the Wi-Fi network, reconnect with the password, and run the network troubleshooter in your system settings.",
+    "recommend_move_closer_to_router": "Move closer to the router, or use a Wi-Fi extender or a network cable.",
+    "recommend_clean_keyboard": "Turn the laptop off, tip it upside down and gently shake it, then use compressed air between the keys.",
+    "recommend_keyboard_repair": "Use a USB keyboard for now, and have a technician reseat or replace the keyboard ribbon cable.",
+    "recommend_turn_on_touchpad": "Press the touchpad key (often one of the F keys), or turn the touchpad on in your system settings.",
+    "recommend_touchpad_repair": "Use a USB mouse for now, and have a technician check the touchpad and its cable.",
+    "recommend_power_off_and_dry": "Turn the laptop off and unplug it straight away. Do not turn it on again until a technician has checked it."
   }
 }
