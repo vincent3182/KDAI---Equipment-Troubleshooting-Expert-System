@@ -45,3 +45,28 @@ def choose_area(kb):
             return area_names[int(choice) - 1]
 
         print(f"Please enter a number from 1 to {len(area_names)}.")
+
+
+
+# --------------------------------------------------
+# ASKING THE USER A QUESTION
+# --------------------------------------------------
+
+def ask_user(fact, question):
+    """
+    Ask the user a yes/no question.
+    Return True for yes and False for no.
+    Keep asking until the user types y or n.
+    """
+
+    while True:
+
+        reply = input(f"{question} (y/n): ").strip().lower()
+
+        if reply in ["y", "yes"]:
+            return True
+
+        if reply in ["n", "no"]:
+            return False
+
+        print("Please type y or n.")
