@@ -70,3 +70,51 @@ def ask_user(fact, question):
             return False
 
         print("Please type y or n.")
+
+
+
+# --------------------------------------------------
+# RUNNING THE PROGRAM
+# --------------------------------------------------
+
+if __name__ == "__main__":
+
+    with open("data/rules.json") as file:
+        kb = json.load(file)
+
+    print("=" * 50)
+    print("LAPTOP TROUBLESHOOTING EXPERT SYSTEM")
+    print("=" * 50)
+    print()
+
+    area = choose_area(kb)
+
+    print()
+
+    # For now, try each diagnosis for this area with backward chaining.
+    # This will be replaced by the full 5-step process in expert_system.py.
+
+    answers = {}
+
+    found = []
+
+    for diagnosis, info in kb["diagnoses"].items():
+
+        if area in info["areas"]:
+
+            if backward_chain(diagnosis, kb, answers, ask_user):
+                found.append(diagnosis)
+
+    print()
+    print("=" * 50)
+    print("RESULTS")
+    print("=" * 50)
+
+    if len(found) == 0:
+        print("No diagnosis could be established from your answers.")
+
+    for diagnosis in found:
+        print(f"\nLikely cause: {diagnosis}")
+        print(f"  {kb['diagnoses'][diagnosis]['cause']}")
+
+    print(f"\nQuestions asked: {len(answers)}")
