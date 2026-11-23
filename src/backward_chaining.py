@@ -66,3 +66,53 @@ def backward_chain(goal, kb, answers, ask):
     return False
 
 
+
+# --------------------------------------------------
+# TESTING AREA
+# --------------------------------------------------
+
+def pretend_user(fact, question):
+    """
+    Pretend to be a user whose charger is faulty,
+    so the code can be tested without typing answers.
+    Any question not listed here is answered "no".
+    """
+
+    yes_answers = [
+        "wont_turn_on",
+        "charger_plugged_in",
+        "charging_light_off",
+        "socket_works_for_other_devices",
+    ]
+
+    answer = fact in yes_answers
+
+    print(question, "->", answer)
+
+    return answer
+
+
+if __name__ == "__main__":
+
+    import json
+
+    with open("data/rules.json") as file:
+        kb = json.load(file)
+
+    answers = {}
+
+    print("Goal: faulty_charger\n")
+
+    result = backward_chain("faulty_charger", kb, answers, pretend_user)
+
+    print("\nProved?", result)
+    print("Questions asked so far:", len(answers))
+
+    print("\nGoal: flat_battery\n")
+
+    result = backward_chain("flat_battery", kb, answers, pretend_user)
+
+    print("\nProved?", result)
+    print("Questions asked so far:", len(answers))
+
+
