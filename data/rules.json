@@ -19,7 +19,14 @@
     "battery_drains_fast": {"area": "power", "text": "Does the battery run out much faster than it used to?"},
     "battery_swollen": {"area": "power", "text": "Is the laptop case bulging, or is the touchpad being pushed up?"},
     "laptop_over_3_years_old": {"area": "power", "text": "Is the laptop more than 3 years old?"},
-    "laptop_over_5_years_old": {"area": "power", "text": "Is the laptop more than 5 years old?"}
+    "laptop_over_5_years_old": {"area": "power", "text": "Is the laptop more than 5 years old?"},
+    "screen_cracked": {"area": "display", "text": "Is the screen cracked or smashed?"},
+    "dead_pixels_or_lines": {"area": "display", "text": "Are there dead pixels or coloured lines on the screen?"},
+    "recently_dropped": {"area": "display", "text": "Has the laptop been dropped or knocked recently?"},
+    "screen_flickers": {"area": "display", "text": "Does the screen flicker or tear?"},
+    "flicker_worse_when_lid_moves": {"area": "display", "text": "Does the flickering get worse when you move the lid?"},
+    "screen_very_dim": {"area": "display", "text": "Is the screen very dim, even at full brightness?"},
+    "faint_image_with_torch": {"area": "display", "text": "If you shine a torch at the screen, can you see a faint image?"}
   },
   "rules": [
     {"id": "P1", "if": ["wont_turn_on", "on_battery_only"], "then": "flat_battery"},
@@ -36,7 +43,19 @@
     {"id": "R3", "if": ["faulty_screen"], "then": "recommend_screen_repair"},
     {"id": "R4", "if": ["faulty_screen", "laptop_over_5_years_old"], "then": "recommend_consider_new_laptop"},
     {"id": "R5", "if": ["worn_out_battery"], "then": "recommend_replace_battery"},
-    {"id": "R6", "if": ["swollen_battery"], "then": "recommend_stop_using_immediately"}
+    {"id": "R6", "if": ["swollen_battery"], "then": "recommend_stop_using_immediately"},
+    {"id": "D1", "if": ["screen_cracked"], "then": "physical_screen_damage"},
+    {"id": "D2", "if": ["dead_pixels_or_lines", "recently_dropped"], "then": "physical_screen_damage"},
+    {"id": "D3", "if": ["physical_screen_damage"], "then": "damaged_screen_panel"},
+    {"id": "D4", "if": ["screen_flickers", "flicker_worse_when_lid_moves"], "then": "cable_moves_with_lid"},
+    {"id": "D5", "if": ["cable_moves_with_lid", "external_monitor_shows_picture"], "then": "loose_display_cable"},
+    {"id": "D6", "if": ["screen_very_dim", "faint_image_with_torch"], "then": "backlight_not_working"},
+    {"id": "D7", "if": ["backlight_not_working"], "then": "failed_backlight"},
+    {"id": "R7", "if": ["damaged_screen_panel"], "then": "recommend_replace_screen_panel"},
+    {"id": "R8", "if": ["loose_display_cable"], "then": "recommend_reseat_display_cable"},
+    {"id": "R9", "if": ["failed_backlight"], "then": "recommend_backlight_repair"},
+    {"id": "R10", "if": ["damaged_screen_panel", "laptop_over_5_years_old"], "then": "recommend_consider_new_laptop"}
+
   ],
   "diagnoses": {
     "flat_battery": {
@@ -72,7 +91,25 @@
       "cause": "The battery appears to be swollen, which is a fire risk.",
       "priority": 5,
       "conflicts_with": []
-    }
+    },
+    "damaged_screen_panel": {
+      "areas": ["display"],
+      "cause": "The screen panel is physically damaged, from a crack or a knock.",
+      "priority": 3,
+      "conflicts_with": []
+    },
+    "loose_display_cable": {
+      "areas": ["display"],
+      "cause": "The flicker changes when the lid moves and an external monitor works, so the display cable is probably loose.",
+      "priority": 2,
+      "conflicts_with": []
+    },
+    "failed_backlight": {
+      "areas": ["display"],
+      "cause": "A faint image is visible with a torch, so the screen works but its backlight has failed.",
+      "priority": 2,
+      "conflicts_with": []
+}
   },
   "recommendations": {
     "recommend_charge_battery": "Plug in the charger, wait 15 minutes, then try turning the laptop on again.",
@@ -80,6 +117,9 @@
     "recommend_screen_repair": "Have the screen or display cable repaired by a technician.",
     "recommend_consider_new_laptop": "The laptop is over 5 years old, so a screen repair may cost more than the laptop is worth. Consider replacing it.",
     "recommend_replace_battery": "Check the battery health in your system settings and replace the battery if its capacity is low.",
-    "recommend_stop_using_immediately": "Stop using and charging the laptop now, and take it to a repair shop. Do not press on or puncture the battery."
+    "recommend_stop_using_immediately": "Stop using and charging the laptop now, and take it to a repair shop. Do not press on or puncture the battery.",
+    "recommend_replace_screen_panel": "Have the screen panel replaced by a technician. Avoid touching any broken glass.",
+    "recommend_reseat_display_cable": "Have a technician reseat or replace the display cable inside the lid.",
+    "recommend_backlight_repair": "Have the backlight or screen panel repaired. Use an external monitor in the meantime."
   }
 }
