@@ -25,3 +25,20 @@ def describe_fact(fact, kb):
     # Otherwise just turn "no_power_reaching_laptop"
     # into "no power reaching laptop".
     return fact.replace("_", " ")
+
+
+
+# --------------------------------------------------
+# PART 2: EXPLAINING ONE RULE
+# --------------------------------------------------
+
+def explain_rule(rule, kb):
+    reasons = []
+    for condition in rule["if"]:
+        reasons.append(describe_fact(condition, kb))
+
+    sentence = "Rule " + rule["id"] + ": because\n"
+    for reason in reasons:
+        sentence = sentence + "   - " + reason + "\n"
+    sentence = sentence + "   so we concluded: " + describe_fact(rule["then"], kb)
+    return sentence
