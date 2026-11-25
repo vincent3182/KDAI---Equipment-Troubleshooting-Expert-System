@@ -70,3 +70,20 @@ def find_diagnoses(inferred_facts, kb):
                     found.append(diagnosis)
 
     return found
+
+# --------------------------------------------------
+# FIND RECOMMENDATIONS
+# --------------------------------------------------
+
+def find_recommendations(inferred_facts, kb):
+    """
+    Return the recommendation names present in inferred_facts.
+    """
+
+    found = []
+
+    for recommendation in kb["recommendations"]:
+        if recommendation in inferred_facts:
+            found.append(recommendation)
+
+    return found
