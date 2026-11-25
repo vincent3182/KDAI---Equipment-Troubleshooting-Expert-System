@@ -113,7 +113,22 @@
     {"id": "R18", "if": ["touchpad_turned_off"], "then": "recommend_turn_on_touchpad"},
     {"id": "R19", "if": ["touchpad_hardware_fault"], "then": "recommend_touchpad_repair"},
     {"id": "R20", "if": ["water_damage"], "then": "recommend_power_off_and_dry"},
-    {"id": "R21", "if": ["water_damage", "laptop_over_5_years_old"], "then": "recommend_consider_new_laptop"}
+    {"id": "R21", "if": ["water_damage", "laptop_over_5_years_old"], "then": "recommend_consider_new_laptop"},
+    {"id": "S1", "if": ["laptop_hot_underneath", "fan_loud_all_the_time"], "then": "laptop_overheating"},
+    {"id": "S2", "if": ["laptop_overheating", "dust_in_vents"], "then": "blocked_cooling"},
+    {"id": "S3", "if": ["laptop_overheating", "used_on_soft_surface"], "then": "blocked_cooling"},
+    {"id": "S4", "if": ["laptop_runs_slowly", "many_programs_at_startup"], "then": "too_many_startup_programs"},
+    {"id": "R22", "if": ["blocked_cooling"], "then": "recommend_clear_air_vents"},
+    {"id": "R23", "if": ["too_many_startup_programs"], "then": "recommend_disable_startup_programs"},
+    {"id": "T1", "if": ["laptop_runs_slowly", "storage_almost_full"], "then": "storage_full"},
+    {"id": "T2", "if": ["clicking_noise", "files_corrupted"], "then": "drive_showing_wear"},
+    {"id": "T3", "if": ["drive_showing_wear"], "then": "failing_drive"},
+    {"id": "T4", "if": ["wont_load_system", "no_boot_device_message"], "then": "drive_not_detected"},
+    {"id": "T5", "if": ["drive_not_detected", "clicking_noise"], "then": "failing_drive"},
+    {"id": "T6", "if": ["wont_load_system", "started_after_update"], "then": "broken_system_update"},
+    {"id": "R24", "if": ["storage_full"], "then": "recommend_free_up_space"},
+    {"id": "R25", "if": ["failing_drive"], "then": "recommend_back_up_and_replace_drive"},
+    {"id": "R26", "if": ["broken_system_update"], "then": "recommend_undo_update"}
 
 
   ],
@@ -229,7 +244,38 @@
       "cause": "Liquid has been spilled and parts of the laptop have stopped working, so liquid has probably got inside.",
       "priority": 4,
       "conflicts_with": []
+    },
+    "blocked_cooling": {
+      "areas": ["performance"],
+      "cause": "The laptop is overheating and its air flow is blocked by dust or a soft surface.",
+      "priority": 3,
+      "conflicts_with": []
+    },
+    "too_many_startup_programs": {
+      "areas": ["performance"],
+      "cause": "Lots of programs start with the laptop and slow it down.",
+      "priority": 1,
+      "conflicts_with": []
+    },
+    "storage_full": {
+      "areas": ["storage", "performance"],
+      "cause": "The storage drive is almost full, which slows the whole laptop down.",
+      "priority": 1,
+      "conflicts_with": []
+    },
+    "failing_drive": {
+      "areas": ["storage"],
+      "cause": "Clicking noises with missing files or a missing drive mean the storage drive is failing. Data may be lost.",
+      "priority": 4,
+      "conflicts_with": []
+    },
+    "broken_system_update": {
+      "areas": ["storage"],
+      "cause": "The system stopped loading right after an update, so the update probably went wrong.",
+      "priority": 2,
+      "conflicts_with": ["drive_not_detected"]
     }
+
   },
   "recommendations": {
     "recommend_charge_battery": "Plug in the charger, wait 15 minutes, then try turning the laptop on again.",
@@ -250,6 +296,11 @@
     "recommend_keyboard_repair": "Use a USB keyboard for now, and have a technician reseat or replace the keyboard ribbon cable.",
     "recommend_turn_on_touchpad": "Press the touchpad key (often one of the F keys), or turn the touchpad on in your system settings.",
     "recommend_touchpad_repair": "Use a USB mouse for now, and have a technician check the touchpad and its cable.",
-    "recommend_power_off_and_dry": "Turn the laptop off and unplug it straight away. Do not turn it on again until a technician has checked it."
+    "recommend_power_off_and_dry": "Turn the laptop off and unplug it straight away. Do not turn it on again until a technician has checked it.",
+    "recommend_clear_air_vents": "Turn the laptop off, clean the vents with compressed air, and use it on a hard, flat surface.",
+    "recommend_disable_startup_programs": "Turn off programs you do not need at start-up (Task Manager on Windows, Login Items on macOS).",
+    "recommend_free_up_space": "Delete files you do not need, empty the bin, and move photos and videos to cloud or external storage.",
+    "recommend_back_up_and_replace_drive": "Back up your files now, before the drive gets worse, then have a technician replace the drive.",
+    "recommend_undo_update": "Start the laptop in recovery mode and undo the last update, or use the built-in startup repair."
   }
 }
