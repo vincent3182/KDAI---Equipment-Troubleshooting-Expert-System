@@ -67,3 +67,56 @@ def work_out_results(answers, kb):
     diagnoses = find_diagnoses(inferred_facts, kb)
 
     return inferred_facts, fired_rules, diagnoses
+
+
+
+# --------------------------------------------------
+# PART 3: THE WHOLE PROCESS
+# --------------------------------------------------
+
+def diagnose(area, kb, ask):
+    answers = ask_questions(area, kb, ask)
+    inferred_facts, fired_rules, diagnoses = work_out_results(answers, kb)
+
+    result = {
+        "diagnosis": None,
+        "cause": "No diagnosis could be found from your answers.",
+        "recommendations": [],
+        "explanation": explain(fired_rules, kb),
+        "questions_asked": len(answers),
+    }
+
+    # Step 5: give the top diagnosis and what to do about it.
+    if len(diagnoses) > 0:
+        top = diagnoses[0]
+        result["diagnosis"] = top
+        result["cause"] = kb["diagnoses"][top]["cause"]
+        result["recommendations"] = find_recommendations(inferred_facts, kb)
+
+    return result
+
+
+# --------------------------------------------------
+# TESTING AREA
+# --------------------------------------------------
+
+if __name__ == "__main__":
+    from src.knowledge_base import load_knowledge_base
+
+    kb = load_knowledge_base()
+
+    # A pretend user whose charger is broken.
+    def pretend_user(fact, question):
+        print("Asked:", question)
+        return fact in ["wont_turn_on", "charger_plugged_in",
+                        "charging_light_off", "socket_works_for_other_devices"]
+
+    result = diagnose("power", kb, pretend_user)
+
+    print()
+    print("Diagnosis:", result["diagnosis"])
+    print("Cause:", result["cause"])
+    print("Recommendations:", result["recommendations"])
+    print("Questions asked:", result["questions_asked"])
+    print()
+    print(result["explanation"])
