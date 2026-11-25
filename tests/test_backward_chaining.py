@@ -115,3 +115,29 @@ def test_second_rule_is_tried_if_first_rule_fails():
     result = backward_chain("wear_coat", kb, answers, user_says_yes_to_windy)
 
     assert result == True
+
+
+
+# --------------------------------------------------
+# TESTS: ASKING AS FEW QUESTIONS AS POSSIBLE
+# --------------------------------------------------
+
+def test_stops_checking_a_rule_after_first_no():
+    questions_asked.clear()
+    answers = {}
+
+    # T3 needs rainy AND cold. Once rainy is "no",
+    # there is no point asking whether it is cold.
+    backward_chain("wear_coat", kb, answers, user_says_no_to_everything)
+
+    assert "cold" not in questions_asked
+
+
+def test_goal_with_no_rules_asks_nothing():
+    questions_asked.clear()
+    answers = {}
+
+    result = backward_chain("go_swimming", kb, answers, user_says_yes_to_rainy)
+
+    assert result == False
+    assert questions_asked == []
