@@ -43,7 +43,17 @@ def explain_rule(rule, kb):
     sentence = sentence + "   so we concluded: " + describe_fact(rule["then"], kb)
     return sentence
 
+# --------------------------------------------------
+# FINDING A RULE BY ITS ID
+# --------------------------------------------------
 
+def find_rule(rule_id, kb):
+    # Forward chaining gives us IDs like "P3",
+    # so look up the full rule that has that ID.
+    for rule in kb["rules"]:
+        if rule["id"] == rule_id:
+            return rule
+    return None
 
 # --------------------------------------------------
 # PART 3: EXPLAINING THE WHOLE ANSWER
@@ -55,7 +65,8 @@ def explain(fired_rules, kb):
 
     text = "How I reached this answer:\n"
     step = 1
-    for rule in fired_rules:
+    for rule_id in fired_rules:
+        rule = find_rule(rule_id, kb)
         text = text + "\nStep " + str(step) + ". " + explain_rule(rule, kb) + "\n"
         step = step + 1
     return text
@@ -71,6 +82,6 @@ if __name__ == "__main__":
     kb = load_knowledge_base()
 
     # Pretend these two rules fired (P2 then P3).
-    fired = [kb["rules"][1], kb["rules"][2]]
+    fired = ["P2", "P3"]
 
     print(explain(fired, kb))
