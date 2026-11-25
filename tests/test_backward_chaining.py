@@ -81,3 +81,37 @@ def test_same_question_is_never_asked_twice():
     backward_chain("stay_dry", kb, answers, user_says_yes_to_rainy)
 
     assert questions_asked.count("rainy") == 1
+
+
+
+# --------------------------------------------------
+# TESTS: FOLLOWING THE RULES
+# --------------------------------------------------
+
+def test_chained_rules_are_followed():
+    questions_asked.clear()
+    answers = {}
+
+    # stay_dry needs take_umbrella, which needs rainy.
+    result = backward_chain("stay_dry", kb, answers, user_says_yes_to_rainy)
+
+    assert result == True
+
+
+def test_goal_fails_when_a_condition_is_no():
+    questions_asked.clear()
+    answers = {}
+
+    result = backward_chain("stay_dry", kb, answers, user_says_no_to_everything)
+
+    assert result == False
+
+
+def test_second_rule_is_tried_if_first_rule_fails():
+    questions_asked.clear()
+    answers = {}
+
+    # T3 fails because it is not rainy, so T4 (windy) is tried instead.
+    result = backward_chain("wear_coat", kb, answers, user_says_yes_to_windy)
+
+    assert result == True
