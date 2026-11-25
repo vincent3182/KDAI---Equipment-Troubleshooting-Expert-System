@@ -42,3 +42,28 @@ def yes_answers(answers):
         if answers[fact] == True:
             facts.add(fact)
     return facts
+
+
+
+# --------------------------------------------------
+# PART 2: WORKING OUT THE RESULTS (STEPS 3 AND 4)
+# --------------------------------------------------
+
+def find_recommendations(inferred_facts, kb):
+    recommendations = []
+    for recommendation in kb["recommendations"]:
+        if recommendation in inferred_facts:
+            recommendations.append(kb["recommendations"][recommendation])
+    return recommendations
+
+
+def work_out_results(answers, kb):
+    facts = yes_answers(answers)
+
+    # Step 3: forward chaining adds every fact that follows.
+    inferred_facts, fired_rules = forward_chain(facts, kb["rules"])
+
+    # Step 4: find the diagnoses, highest priority first.
+    diagnoses = find_diagnoses(inferred_facts, kb)
+
+    return inferred_facts, fired_rules, diagnoses
