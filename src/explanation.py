@@ -42,3 +42,35 @@ def explain_rule(rule, kb):
         sentence = sentence + "   - " + reason + "\n"
     sentence = sentence + "   so we concluded: " + describe_fact(rule["then"], kb)
     return sentence
+
+
+
+# --------------------------------------------------
+# PART 3: EXPLAINING THE WHOLE ANSWER
+# --------------------------------------------------
+
+def explain(fired_rules, kb):
+    if len(fired_rules) == 0:
+        return "No rules fired, so there is nothing to explain."
+
+    text = "How I reached this answer:\n"
+    step = 1
+    for rule in fired_rules:
+        text = text + "\nStep " + str(step) + ". " + explain_rule(rule, kb) + "\n"
+        step = step + 1
+    return text
+
+
+# --------------------------------------------------
+# TESTING AREA
+# --------------------------------------------------
+
+if __name__ == "__main__":
+    from src.knowledge_base import load_knowledge_base
+
+    kb = load_knowledge_base()
+
+    # Pretend these two rules fired (P2 then P3).
+    fired = [kb["rules"][1], kb["rules"][2]]
+
+    print(explain(fired, kb))
