@@ -43,7 +43,19 @@
     "usb_mouse_works": {"area": "audio_input", "text": "If you plug in a USB mouse, does it work?"},
     "touchpad_off_light_on": {"area": "audio_input", "text": "Is a touchpad light on, or is a 'touchpad off' icon showing?"},
     "touchpad_dead_after_restart": {"area": "audio_input", "text": "After restarting the laptop, is the touchpad still not working?"},
-    "liquid_spilled": {"area": "audio_input", "text": "Has any liquid been spilled on the laptop?"}
+    "liquid_spilled": {"area": "audio_input", "text": "Has any liquid been spilled on the laptop?"},
+    "laptop_runs_slowly": {"area": "performance", "text": "Is the laptop much slower than it used to be?"},
+    "many_programs_at_startup": {"area": "performance", "text": "Do lots of programs open by themselves when the laptop starts?"},
+    "laptop_hot_underneath": {"area": "performance", "text": "Does the laptop get very hot underneath?"},
+    "fan_loud_all_the_time": {"area": "performance", "text": "Is the fan loud, even when you are only browsing?"},
+    "dust_in_vents": {"area": "performance", "text": "Can you see dust in the air vents?"},
+    "used_on_soft_surface": {"area": "performance", "text": "Do you often use the laptop on a bed, sofa or your lap?"},
+    "storage_almost_full": {"area": "storage", "text": "Does your storage drive show as almost full (a red bar in File Explorer or Finder)?"},
+    "wont_load_system": {"area": "storage", "text": "Does the laptop turn on but fail to load Windows or macOS?"},
+    "no_boot_device_message": {"area": "storage", "text": "Does it show a message like 'No bootable device' or 'Operating system not found'?"},
+    "clicking_noise": {"area": "storage", "text": "Does the laptop make clicking or grinding noises?"},
+    "files_corrupted": {"area": "storage", "text": "Do files go missing, or fail to open with errors?"},
+    "started_after_update": {"area": "storage", "text": "Did the problem start right after a system update?"}
   },
   "rules": [
     {"id": "P1", "if": ["wont_turn_on", "on_battery_only"], "then": "flat_battery"},
