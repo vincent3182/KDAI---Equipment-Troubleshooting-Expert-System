@@ -14,7 +14,8 @@ Run it from the main project folder with:
 
 import json
 
-from src.backward_chaining import backward_chain
+from src.knowledge_base import load_knowledge_base
+from src.expert_system import diagnose
 
 
 # --------------------------------------------------
@@ -71,6 +72,37 @@ def ask_user(fact, question):
 
         print("Please type y or n.")
 
+        
+
+
+
+# --------------------------------------------------
+# SHOWING THE RESULTS
+# --------------------------------------------------
+
+def show_result(result):
+    print()
+    print("=" * 50)
+    print("RESULTS")
+    print("=" * 50)
+
+    if result["diagnosis"] is None:
+        print("\n" + result["cause"])
+    else:
+        print("\nLikely cause:")
+        print("  " + result["cause"])
+
+        print("\nWhat to do:")
+        for recommendation in result["recommendations"]:
+            print("  - " + recommendation)
+
+    for warning in result["warnings"]:
+        print("\nNote: " + warning)
+
+    print("\nQuestions asked: " + str(result["questions_asked"]))
+
+    print()
+    print(result["explanation"])
 
 
 # --------------------------------------------------
