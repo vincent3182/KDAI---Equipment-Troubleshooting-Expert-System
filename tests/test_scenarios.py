@@ -86,3 +86,18 @@ def run_scenario(area, yes_facts):
         return fact in yes_facts
 
     return diagnose(area, kb, pretend_user)
+
+
+
+# --------------------------------------------------
+# PART 2: THE TESTS
+# --------------------------------------------------
+
+def test_every_scenario_gets_the_right_diagnosis():
+    wrong = []
+    for area, yes_facts, expected in scenarios:
+        result = run_scenario(area, yes_facts)
+        if result["diagnosis"] != expected:
+            wrong.append(expected)
+
+    assert wrong == []
