@@ -101,3 +101,18 @@ def test_every_scenario_gets_the_right_diagnosis():
             wrong.append(expected)
 
     assert wrong == []
+
+
+
+def test_every_diagnosis_has_a_recommendation():
+    for area, yes_facts, expected in scenarios:
+        result = run_scenario(area, yes_facts)
+        if expected is not None:
+            assert len(result["recommendations"]) > 0
+
+
+def test_questions_asked_stays_low():
+    # No scenario should need more than 10 questions.
+    for area, yes_facts, expected in scenarios:
+        result = run_scenario(area, yes_facts)
+        assert result["questions_asked"] <= 10
