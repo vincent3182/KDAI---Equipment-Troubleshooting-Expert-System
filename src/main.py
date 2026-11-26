@@ -12,8 +12,6 @@ Run it from the main project folder with:
     python3 -m src.main
 """
 
-import json
-
 from src.knowledge_base import load_knowledge_base
 from src.expert_system import diagnose
 
@@ -111,8 +109,7 @@ def show_result(result):
 
 if __name__ == "__main__":
 
-    with open("data/rules.json") as file:
-        kb = json.load(file)
+    kb = load_knowledge_base()
 
     print("=" * 50)
     print("LAPTOP TROUBLESHOOTING EXPERT SYSTEM")
@@ -120,33 +117,8 @@ if __name__ == "__main__":
     print()
 
     area = choose_area(kb)
-
     print()
 
-    # For now, try each diagnosis for this area with backward chaining.
-    # This will be replaced by the full 5-step process in expert_system.py.
+    result = diagnose(area, kb, ask_user)
 
-    answers = {}
-
-    found = []
-
-    for diagnosis, info in kb["diagnoses"].items():
-
-        if area in info["areas"]:
-
-            if backward_chain(diagnosis, kb, answers, ask_user):
-                found.append(diagnosis)
-
-    print()
-    print("=" * 50)
-    print("RESULTS")
-    print("=" * 50)
-
-    if len(found) == 0:
-        print("No diagnosis could be established from your answers.")
-
-    for diagnosis in found:
-        print(f"\nLikely cause: {diagnosis}")
-        print(f"  {kb['diagnoses'][diagnosis]['cause']}")
-
-    print(f"\nQuestions asked: {len(answers)}")
+    show_result(result)
