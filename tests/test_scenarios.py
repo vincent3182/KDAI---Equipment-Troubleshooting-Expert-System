@@ -62,6 +62,21 @@ scenarios = [
                      "usb_mouse_works"], "touchpad_hardware_fault"),
     ("audio_input", ["some_keys_not_working", "liquid_spilled"], "water_damage"),
 
+
+    # Performance
+    ("performance", ["fan_loud_all_the_time", "laptop_hot_underneath",
+                     "dust_in_vents"], "blocked_cooling"),
+    ("performance", ["laptop_runs_slowly", "many_programs_at_startup"],
+     "too_many_startup_programs"),
+
+    # Storage
+    ("storage", ["laptop_runs_slowly", "storage_almost_full"], "storage_full"),
+    ("storage", ["clicking_noise", "files_corrupted"], "failing_drive"),
+    ("storage", ["wont_load_system", "started_after_update"], "broken_system_update"),
+
+    # A user who says NO to everything should get no diagnosis
+    ("power", [], None),
+
 ]
 
 
