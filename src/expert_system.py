@@ -14,7 +14,7 @@ Joins all the parts together into our 5-step process:
 """
 
 from src.backward_chaining import backward_chain
-from src.forward_chaining import forward_chain, find_diagnoses
+from src.forward_chaining import forward_chain, find_diagnoses, resolve_conflicts
 from src.explanation import explain
 
 
@@ -66,7 +66,10 @@ def work_out_results(answers, kb):
     # Step 4: find the diagnoses, highest priority first.
     diagnoses = find_diagnoses(inferred_facts, kb)
 
-    return inferred_facts, fired_rules, diagnoses
+        # If two diagnoses clash, keep the one with stronger evidence.
+    diagnoses, warnings = resolve_conflicts(diagnoses, inferred_facts, fired_rules, kb)
+
+    return inferred_facts, fired_rules, diagnoses, warnings
 
 
 
@@ -76,7 +79,7 @@ def work_out_results(answers, kb):
 
 def diagnose(area, kb, ask):
     answers = ask_questions(area, kb, ask)
-    inferred_facts, fired_rules, diagnoses = work_out_results(answers, kb)
+    inferred_facts, fired_rules, diagnoses, warnings = work_out_results(answers, kb)
 
     result = {
         "diagnosis": None,
@@ -84,6 +87,7 @@ def diagnose(area, kb, ask):
         "recommendations": [],
         "explanation": explain(fired_rules, kb),
         "questions_asked": len(answers),
+        "warnings": warnings,
     }
 
     # Step 5: give the top diagnosis and what to do about it.
