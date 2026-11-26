@@ -116,3 +116,29 @@ def test_questions_asked_stays_low():
     for area, yes_facts, expected in scenarios:
         result = run_scenario(area, yes_facts)
         assert result["questions_asked"] <= 10
+
+
+# --------------------------------------------------
+# PART 3: SUMMARY TABLE FOR THE REPORT
+# --------------------------------------------------
+
+if __name__ == "__main__":
+    correct = 0
+    total_questions = 0
+
+    print(f"{'Expected':32} {'Got':32} {'Questions':>9}")
+    print("-" * 75)
+
+    for area, yes_facts, expected in scenarios:
+        result = run_scenario(area, yes_facts)
+
+        if result["diagnosis"] == expected:
+            correct = correct + 1
+        total_questions = total_questions + result["questions_asked"]
+
+        print(f"{str(expected):32} {str(result['diagnosis']):32} {result['questions_asked']:>9}")
+
+    print("-" * 75)
+    print("Scenarios:", len(scenarios))
+    print("Accuracy:", round(correct / len(scenarios) * 100, 1), "%")
+    print("Average questions asked:", round(total_questions / len(scenarios), 1))
