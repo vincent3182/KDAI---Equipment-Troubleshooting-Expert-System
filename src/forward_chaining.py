@@ -87,3 +87,24 @@ def find_recommendations(inferred_facts, kb):
             found.append(recommendation)
 
     return found
+
+# --------------------------------------------------
+# EVIDENCE STRENGTH
+# --------------------------------------------------
+
+def evidence_strength(fact, fired_rules, kb):
+    """
+    Return how strong the evidence for a fact is:
+    the number of conditions in the fired rule that concluded it.
+    If several fired rules concluded it, use the largest.
+    A fact that no fired rule concluded has strength 0.
+    """
+
+    strength = 0
+
+    for rule in kb["rules"]:
+        if rule["id"] in fired_rules and rule["then"] == fact:
+            if len(rule["if"]) > strength:
+                strength = len(rule["if"])
+
+    return strength
