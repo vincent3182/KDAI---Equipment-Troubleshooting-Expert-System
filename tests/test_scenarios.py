@@ -42,6 +42,26 @@ scenarios = [
                  "external_monitor_shows_picture"], "loose_display_cable"),
     ("display", ["screen_very_dim", "faint_image_with_torch"], "failed_backlight"),
 
+    # Network
+    ("network", ["no_wifi_networks_shown", "airplane_mode_on",
+                 "other_devices_work_on_wifi"], "wifi_turned_off"),
+    ("network", ["no_wifi_networks_shown", "other_devices_work_on_wifi",
+                 "still_no_networks_after_restart"], "faulty_wifi_adapter"),
+    ("network", ["connected_but_no_internet", "other_devices_also_offline"],
+     "router_or_broadband_fault"),
+    ("network", ["connected_but_no_internet", "other_devices_work_on_wifi"],
+     "laptop_network_settings_fault"),
+    ("network", ["connection_keeps_dropping", "far_from_router"], "weak_wifi_signal"),
+
+    # Sound, keyboard and touchpad
+    ("audio_input", ["some_keys_not_working", "crumbs_or_dust_under_keys"], "dirty_keyboard"),
+    ("audio_input", ["whole_keyboard_dead", "usb_keyboard_works"], "keyboard_ribbon_cable_fault"),
+    ("audio_input", ["touchpad_not_responding", "touchpad_off_light_on",
+                     "usb_mouse_works"], "touchpad_turned_off"),
+    ("audio_input", ["touchpad_not_responding", "touchpad_dead_after_restart",
+                     "usb_mouse_works"], "touchpad_hardware_fault"),
+    ("audio_input", ["some_keys_not_working", "liquid_spilled"], "water_damage"),
+
 ]
 
 
