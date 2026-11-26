@@ -108,3 +108,41 @@ def evidence_strength(fact, fired_rules, kb):
                 strength = len(rule["if"])
 
     return strength
+
+# --------------------------------------------------
+# RESOLVE CONFLICTS
+# --------------------------------------------------
+
+def resolve_conflicts(diagnoses, inferred_facts, fired_rules, kb):
+    """
+    Return (kept_diagnoses, warnings).
+
+    If a diagnosis conflicts with another fact that was also found,
+    keep the one with stronger evidence. If it is a tie, keep both.
+    """
+
+    kept_diagnoses = list(diagnoses)   # copy, so the input list is not changed
+    warnings = []
+
+    for diagnosis in diagnoses:
+        for conflict in kb["diagnoses"][diagnosis]["conflicts_with"]:
+
+            if conflict in inferred_facts:
+
+                my_score = evidence_strength(diagnosis, fired_rules, kb)
+                their_score = evidence_strength(conflict, fired_rules, kb)
+
+                if my_score > their_score:
+                    if conflict in kept_diagnoses:
+                        kept_diagnoses.remove(conflict)
+                    warnings.append(f"Kept {diagnosis} over {conflict}: stronger evidence.")
+
+                elif their_score > my_score:
+                    if diagnosis in kept_diagnoses:
+                        kept_diagnoses.remove(diagnosis)
+                    warnings.append(f"Dropped {diagnosis}: {conflict} has stronger evidence.")
+
+                else:
+                    warnings.append(f"{diagnosis} and {conflict} have equal evidence, so both are kept.")
+
+    return kept_diagnoses, warnings
