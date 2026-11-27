@@ -1,50 +1,37 @@
 """
-Tests for src/knowledge_base.py
+Tests for src/forward_chaining.py
 
-Test 1 checks our real rules.json has no mistakes.
-The other tests add ONE mistake on purpose, and check
-that the validator spots it.
+Each test gives forward chaining some "yes" answers,
+then checks the result is what we expect.
 """
 
-from src.knowledge_base import load_knowledge_base, validate_knowledge_base
+from src.knowledge_base import load_knowledge_base
+from src.forward_chaining import (forward_chain, find_diagnoses,
+                                  find_recommendations, resolve_conflicts)
 
 
-def test_real_rules_have_no_mistakes():
+# --------------------------------------------------
+# FORWARD CHAINING
+# --------------------------------------------------
+
+def test_rules_fire_in_a_chain():
     kb = load_knowledge_base()
-    errors = validate_knowledge_base(kb)
-    assert errors == []
+    answers = {"wont_turn_on", "charger_plugged_in", "lights_or_fan_on",
+               "external_monitor_shows_picture", "laptop_over_5_years_old"}
+    facts, fired = forward_chain(answers, kb["rules"])
+    assert fired == ["P5", "P6", "R3", "R4"]
 
 
-def test_spots_a_typo_in_a_rule():
+def test_rule_does_not_fire_if_a_condition_is_missing():
     kb = load_knowledge_base()
-    kb["rules"].append({"id": "X1", "if": ["wont_turn_onn"], "then": "flat_battery"})
-    errors = validate_knowledge_base(kb)
-    assert errors != []
+    answers = {"wont_turn_on"}          # P1 also needs on_battery_only
+    facts, fired = forward_chain(answers, kb["rules"])
+    assert "flat_battery" not in facts
 
 
-def test_spots_a_repeated_rule_id():
+def test_original_answers_are_not_changed():
     kb = load_knowledge_base()
-    kb["rules"].append({"id": "P1", "if": ["wont_turn_on"], "then": "flat_battery"})
-    errors = validate_knowledge_base(kb)
-    assert errors != []
+    answers = {"wont_turn_on", "on_battery_only"}
+    forward_chain(answers, kb["rules"])
+    assert answers == {"wont_turn_on", "on_battery_only"}
 
-
-def test_spots_a_rule_that_concludes_a_question():
-    kb = load_knowledge_base()
-    kb["rules"].append({"id": "X1", "if": ["battery_swollen"], "then": "wont_turn_on"})
-    errors = validate_knowledge_base(kb)
-    assert errors != []
-
-
-def test_spots_advice_that_no_rule_reaches():
-    kb = load_knowledge_base()
-    kb["recommendations"]["recommend_magic"] = "Wave a wand."
-    errors = validate_knowledge_base(kb)
-    assert errors != []
-
-
-def test_spots_a_typo_in_a_conflict():
-    kb = load_knowledge_base()
-    kb["diagnoses"]["flat_battery"]["conflicts_with"] = ["laptop_has_powerr"]
-    errors = validate_knowledge_base(kb)
-    assert errors != []
