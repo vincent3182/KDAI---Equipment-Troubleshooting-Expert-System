@@ -53,3 +53,34 @@ def test_recommendation_is_found():
     facts, fired = forward_chain(answers, kb["rules"])
     assert find_recommendations(facts, kb) == ["recommend_charge_battery"]
 
+
+# --------------------------------------------------
+# CONFLICT RESOLUTION
+# --------------------------------------------------
+
+def test_stronger_evidence_wins():
+    kb = load_knowledge_base()
+    answers = {"some_keys_not_working", "crumbs_or_dust_under_keys", "liquid_spilled"}
+    facts, fired = forward_chain(answers, kb["rules"])
+    kept, warnings = resolve_conflicts(find_diagnoses(facts, kb), facts, fired, kb)
+    assert kept == ["water_damage"]
+    assert len(warnings) == 1
+
+
+def test_equal_evidence_keeps_both():
+    kb = load_knowledge_base()
+    answers = {"no_wifi_networks_shown", "other_devices_work_on_wifi",
+               "airplane_mode_on", "still_no_networks_after_restart"}
+    facts, fired = forward_chain(answers, kb["rules"])
+    kept, warnings = resolve_conflicts(find_diagnoses(facts, kb), facts, fired, kb)
+    assert kept == ["faulty_wifi_adapter", "wifi_turned_off"]
+    assert len(warnings) == 1
+
+
+def test_no_conflict_gives_no_warnings():
+    kb = load_knowledge_base()
+    answers = {"battery_swollen"}
+    facts, fired = forward_chain(answers, kb["rules"])
+    kept, warnings = resolve_conflicts(find_diagnoses(facts, kb), facts, fired, kb)
+    assert kept == ["swollen_battery"]
+    assert warnings == []
