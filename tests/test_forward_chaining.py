@@ -35,3 +35,21 @@ def test_original_answers_are_not_changed():
     forward_chain(answers, kb["rules"])
     assert answers == {"wont_turn_on", "on_battery_only"}
 
+# --------------------------------------------------
+# DIAGNOSES AND RECOMMENDATIONS
+# --------------------------------------------------
+
+def test_most_urgent_diagnosis_comes_first():
+    kb = load_knowledge_base()
+    answers = {"wont_turn_on", "charger_plugged_in", "lights_or_fan_on",
+               "external_monitor_shows_picture", "battery_swollen"}
+    facts, fired = forward_chain(answers, kb["rules"])
+    assert find_diagnoses(facts, kb) == ["swollen_battery", "faulty_screen"]
+
+
+def test_recommendation_is_found():
+    kb = load_knowledge_base()
+    answers = {"wont_turn_on", "on_battery_only"}
+    facts, fired = forward_chain(answers, kb["rules"])
+    assert find_recommendations(facts, kb) == ["recommend_charge_battery"]
+
